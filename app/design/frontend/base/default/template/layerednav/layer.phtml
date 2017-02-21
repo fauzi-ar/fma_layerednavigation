@@ -1,7 +1,6 @@
 <?php if ($this->canShowBlock()): $state = $this->getStateInfo() ?>
         <div class="block-title">
-            <strong><span><?php echo $this->__('Refine By') ?></span></strong>
-           
+            <strong><span><?php echo $this->__('Refine By') ?></span></strong>           
         </div>
         <div class="block-content">
             <?php echo $this->getStateHtml() ?>
@@ -43,46 +42,45 @@
             <?php endif; ?>
         </div>
         <div class="fme_loading_filters" style="display:none"></div>
+        <script type="text/javascript">
+            decorateDataList('fme_filters_list');
+            fme_layered_init();
+
+            if (typeof(initialized) == 'undefined'){
+                var initialized = true;
+                jQuery(document).ready( function($){
+                    $('select.fme_layered_attribute_dropdown').each( function(){
+                        var select = $(this).selectize();
+                        $(this).next().on('click','.item', function(){
+                            var selectize = select[0].selectize;
+                            selectize.removeItem($(this).data('value'), false); 
+                        });
+                    });
+
+                    $('select.fme_layered_attribute_dropdown').change(fme_layered_attribute_dropdown_listener);
+
+                    $('#fme_filters_list .attrib-filter').click( function(){
+                        $(this).next().siblings('dd').removeClass('showfilters');
+                        $(this).next().toggleClass('showfilters');
+                    });
+
+                    $('.fme_layered_clear_all_mobile').click( function(e){
+                        $('#fme_filters_list .fme_layered_clearall').click();
+                        return false;
+                    })
+
+                    <?php if ($this->getIsAjax()): ?>
+                        $('.col-main #fme_filters_list').addClass('no-display');
+                        $('.col-main .block-subtitle--filter').click( function(){
+                            $(this).toggleClass('active');
+                            $(this).next().toggleClass('no-display')
+                        });
+                    <?php endif; ?>
+
+                });
+            } 
+        </script>
 <?php endif; ?>
-
-<script type="text/javascript">
-    decorateDataList('fme_filters_list');
-    fme_layered_init();
-
-    if (typeof(initialized) == 'undefined'){
-        var initialized = true;
-        jQuery(document).ready( function($){
-            $('select.fme_layered_attribute_dropdown').each( function(){
-                var select = $(this).selectize();
-                $(this).next().on('click','.item', function(){
-                    var selectize = select[0].selectize;
-                    selectize.removeItem($(this).data('value'), false); 
-                });
-            });
-
-            $('select.fme_layered_attribute_dropdown').change(fme_layered_attribute_dropdown_listener);
-
-            $('#fme_filters_list .attrib-filter').click( function(){
-                $(this).next().siblings('dd').removeClass('showfilters');
-                $(this).next().toggleClass('showfilters');
-            });
-
-            $('.fme_layered_clear_all_mobile').click( function(e){
-                $('#fme_filters_list .fme_layered_clearall').click();
-                return false;
-            })
-
-            <?php if ($this->getIsAjax()): ?>
-                $('.col-main #fme_filters_list').addClass('no-display');
-                $('.col-main .block-subtitle--filter').click( function(){
-                    $(this).toggleClass('active');
-                    $(this).next().toggleClass('no-display')
-                });
-            <?php endif; ?>
-
-        });
-    } 
-</script>
 
 
 
