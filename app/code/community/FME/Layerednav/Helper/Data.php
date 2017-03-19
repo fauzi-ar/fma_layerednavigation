@@ -194,8 +194,24 @@ class FME_Layerednav_Helper_Data extends Mage_Core_Helper_Abstract {
             $query = Mage::app()->getRequest()->getQuery();
             $sess = (array) $sessionObject->getAdjNav();
 
-            //$this->_params = array_merge($sess, $query);
-            $this->_params = $query;
+            if (!$this->getIsAjax){
+                $params = Mage::app()->getRequest()->getParams();
+                $specialParams = $this->getSpecialFilteringParamKeys();
+                $specialQuery = array();
+                
+                foreach ($params as $k => $v){
+                    if (in_array($k,$specialParams)){
+                        $specialQuery[$k] = $v;
+                    }
+                }
+
+                $this->_params = array_merge($query,$specialQuery);
+            }
+            else {
+                //$this->_params = array_merge($sess, $query);
+                $this->_params = $query;
+            }
+
 
             if (!empty($query['clearall']) OR $bNeedClearAll) { 
                 $this->_params = array();
@@ -282,6 +298,10 @@ class FME_Layerednav_Helper_Data extends Mage_Core_Helper_Abstract {
 
     protected function getNonFilteringParamKeys() {
         return array('x', 'y', 'mode', 'p', 'order', 'dir', 'limit', 'q', '___store', '___from_store', 'sns');
+    }
+
+    protected function getSpecialFilteringParamKeys() {
+        return array('brand','vendor');
     }
 
     public function checkColor($attrColor) {

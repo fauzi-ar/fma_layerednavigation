@@ -13,7 +13,7 @@
 <config>
     <modules>
         <FME_Layerednav>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </FME_Layerednav>
     </modules>
     <frontend>
@@ -73,18 +73,24 @@
                 <rewrite>
                     <category_view>FME_Layerednav_Block_Rewrite_RewriteCatalogCategoryView</category_view>
                 </rewrite> 
+            </catalog>
+
+            <catalog>
+                <rewrite>
+                    <category_layered>FME_Layerednav_Block_Product_RewriteCatalogProductList</category_layered>
+                </rewrite> 
             </catalog>  
             
             <catalog>
                 <rewrite>
                     <layer_view>FME_Layerednav_Block_Rewrite_RewriteCatalogLayerView</layer_view>
                 </rewrite>
-            </catalog>          
+            </catalog>
             <catalogsearch>
                 <rewrite>
                     <result>FME_Layerednav_Block_Rewrite_RewriteCatalogsearchResult</result>
-                </rewrite> 
-            </catalogsearch>            
+                </rewrite>
+            </catalogsearch>
         </blocks>
         <helpers>
             <layerednav>
@@ -95,6 +101,7 @@
             <layerednav_setup>
                 <setup>
                     <module>FME_Layerednav</module>
+                    <class>FME_Layerednav_Model_Resource_Setup</class>
                 </setup>
                 <connection>
                     <use>core_setup</use>

@@ -36,7 +36,7 @@ class FME_Layerednav_Block_Layer_View extends Mage_Catalog_Block_Layer_View {
 
 
         $ajaxUrl = $_hlp->stripQuery($ajaxUrl);
-         $url = $_hlp->getContinueShoppingUrl();
+        $url = $_hlp->getContinueShoppingUrl();
 
         //Set the AJAX Pagination
         $pageKey = Mage::getBlockSingleton('page/html_pager')->getPageVarName();
@@ -51,6 +51,17 @@ class FME_Layerednav_Block_Layer_View extends Mage_Catalog_Block_Layer_View {
         if (false !== strpos($url, '?')) {
             $url = substr($url, 0, strpos($url, '?'));
         }
+        
+        $params = Mage::app()->getRequest()->getParams();
+        
+        if (!$this->getIsAjax()){
+            if (isset($params['brand'])){
+                $queryStr.='brand=' . $params['brand'];    
+            }
+            else if (isset($params['vendor'])){
+                $queryStr.='vendor=' . $params['vendor'];    
+            }            
+        }        
         return array($url, $queryStr, $ajaxUrl);
     }
 
