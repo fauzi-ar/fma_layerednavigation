@@ -118,6 +118,17 @@
                 </connection>
             </layerednav_read>
         </resources>
+        <events>
+            <catalog_entity_attribute_save_after>
+                <observers>
+                   <FME_Layerednav_Model_Observer>
+                      <type>singleton</type>
+                      <class>FME_Layerednav_Model_Observer</class>
+                      <method>attributechanged</method>
+                   </FME_Layerednav_Model_Observer>
+               </observers>
+            </catalog_entity_attribute_save_after>
+        </events>
     </global> 
     <default>
         <layerednav>

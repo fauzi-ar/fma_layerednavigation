@@ -31,6 +31,12 @@ class FME_Layerednav_Model_Resource_Setup extends Mage_Core_Model_Resource_Setup
 				    ->setRequestPath('brand/' . $code)
 				    ->save();
 			}
+			//overwrite the old one
+			else {
+				$rewriteBrand->setIdPath($type . '_' . $code . '_' . $option['value'])
+						->setTargetPath('catalog/category/view/id/2003/brand/' . $option['value'])
+						->save();
+			}
 		}
 	}
 
@@ -54,14 +60,20 @@ class FME_Layerednav_Model_Resource_Setup extends Mage_Core_Model_Resource_Setup
 */
 		foreach ($options as $option){
 			$code = strtolower(preg_replace('#[^0-9a-z]+#i', '-', $option['label']));
-			$rewriteBrand = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath('vendor/' . $code);
-			if (!($rewriteBrand['url_rewrite_id'])){
+			$rewriteVendor = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath('vendor/' . $code);
+			if (!($rewriteVendor['url_rewrite_id'])){
 				Mage::getModel('core/url_rewrite')
 				    ->setIsSystem(false)
 				    ->setIdPath('vendor_' . $code . '_' . $option['value'])
 				    ->setTargetPath('catalog/category/view/id/2003/vendor/' . $option['value'])
 				    ->setRequestPath('vendor/' . $code)
 				    ->save();
+			}
+			//overwrite the old one
+			else {
+				$rewriteVendor->setIdPath($type . '_' . $code . '_' . $option['value'])
+						->setTargetPath('catalog/category/view/id/2003/vendor/' . $option['value'])
+						->save();
 			}
 		}
 	}
