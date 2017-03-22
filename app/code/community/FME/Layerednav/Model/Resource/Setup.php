@@ -13,15 +13,15 @@ class FME_Layerednav_Model_Resource_Setup extends Mage_Core_Model_Resource_Setup
 		$options = $_collection->toOptionArray();
 			
 /*		SCRIPT FOR DELETING REWRITE */
-/*
+
 		$rewrites = Mage::getModel('core/url_rewrite')->getCollection()->addFieldToFilter('id_path',array('like' => 'brand_%'));
 		foreach ($rewrites as $rewrite){
 			$rewrite->delete();
 		}
-		echo 'delete success';die();
-*/
+
 		foreach ($options as $option){
-			$code = strtolower(preg_replace('#[^0-9a-z]+#i', '-', $option['label']));
+			$code = strtolower(preg_replace('#[^0-9a-z ]+#i', '', $option['label']));
+			$code = str_replace(' ', '-', trim($code));
 			$rewriteBrand = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath('brand/' . $code);
 			if (!($rewriteBrand['url_rewrite_id'])){
 				Mage::getModel('core/url_rewrite')
@@ -51,15 +51,15 @@ class FME_Layerednav_Model_Resource_Setup extends Mage_Core_Model_Resource_Setup
 		$options = $_collection->toOptionArray();
 			
 /*		SCRIPT FOR DELETING REWRITE */
-/*
+
 		$rewrites = Mage::getModel('core/url_rewrite')->getCollection()->addFieldToFilter('id_path',array('like' => 'vendor_%'));
 		foreach ($rewrites as $rewrite){
 			$rewrite->delete();
 		}
-		echo 'delete success';die();
-*/
+
 		foreach ($options as $option){
-			$code = strtolower(preg_replace('#[^0-9a-z]+#i', '-', $option['label']));
+			$code = strtolower(preg_replace('#[^0-9a-z ]+#i', '', $option['label']));
+			$code = str_replace(' ', '-', trim($code));
 			$rewriteVendor = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath('vendor/' . $code);
 			if (!($rewriteVendor['url_rewrite_id'])){
 				Mage::getModel('core/url_rewrite')

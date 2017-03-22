@@ -14,7 +14,8 @@ Class FME_Layerednav_Model_Observer
 			$options = $_collection->toOptionArray();
 
 			foreach ($options as $option){
-				$code = strtolower(preg_replace('#[^0-9a-z]+#i', '-', $option['label']));
+				$code = strtolower(preg_replace('#[^0-9a-z ]+#i', '', $option['label']));
+				$code = str_replace(' ', '-', trim($code));
 				$rewrite = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath($type . '/' . $code);
 				if (!($rewrite['url_rewrite_id'])){
 					Mage::getModel('core/url_rewrite')
