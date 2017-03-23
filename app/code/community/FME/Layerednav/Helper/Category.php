@@ -4,7 +4,7 @@ class FME_Layerednav_Helper_Category extends Mage_Catalog_Helper_Category
 {
 	public function getStoreCategories($sorted=false, $asCollection=false, $toLoad=true)
 	{
-	    $parent     = 2003; /* edit this, use setting or something*/
+	    $parent     = Mage::getStoreConfig('layerednav/layerednav/catalog_parent_category_id');
 	    $cacheKey   = sprintf('%d-%d-%d-%d', $parent, $sorted, $asCollection, $toLoad);
 	    if (isset($this->_storeCategories[$cacheKey])) {
 	        return $this->_storeCategories[$cacheKey];

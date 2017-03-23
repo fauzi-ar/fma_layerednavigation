@@ -481,5 +481,65 @@ class FME_Layerednav_Helper_Data extends Mage_Core_Helper_Abstract {
       $name=$category->getName();
       return $name;
     }
+    public function createBrandRewrite($subroot_id){
+        
+        $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', 'brand');
+        $_collection = Mage::getResourceModel('eav/entity_attribute_option_collection')
+                        ->setAttributeFilter($attributeModel->getId())
+                      ->setStoreFilter(0)
+                      ->load();
+        $options = $_collection->toOptionArray();
+        foreach ($options as $option){
+            $code = strtolower(preg_replace('#[^0-9a-z ]+#i', '', $option['label']));
+            $code = str_replace(' ', '-', trim($code));
+            $rewriteBrand = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath('brand/' . $code);
+            if (!($rewriteBrand['url_rewrite_id'])){
+                Mage::getModel('core/url_rewrite')
+                    ->setIsSystem(false)
+                    ->setIdPath('brand_' . $code . '_' . $option['value'])
+                    ->setTargetPath('catalog/category/view/id/' . $subroot_id . '/brand/' . $option['value'])
+                    ->setRequestPath('brand/' . $code)
+                    ->save();
+            }
+            //overwrite the old one
+            else {
+                $rewriteBrand->setIdPath('brand_' . $code . '_' . $option['value'])
+                        ->setTargetPath('catalog/category/view/id/' . $subroot_id . '/brand/' . $option['value'])
+                        ->save();
+            }
+        }
+    }
+
+    public function createVendorRewrite($subroot_id){
+        
+        $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', 'vendor');
+        $_collection = Mage::getResourceModel('eav/entity_attribute_option_collection')
+                        ->setAttributeFilter($attributeModel->getId())
+                      ->setStoreFilter(0)
+                      ->load();
+
+        $options = $_collection->toOptionArray();
+            
+        foreach ($options as $option){
+            $code = strtolower(preg_replace('#[^0-9a-z ]+#i', '', $option['label']));
+            $code = str_replace(' ', '-', trim($code));
+            $rewriteVendor = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath('vendor/' . $code);
+            if (!($rewriteVendor['url_rewrite_id'])){
+                Mage::getModel('core/url_rewrite')
+                    ->setIsSystem(false)
+                    ->setIdPath('vendor_' . $code . '_' . $option['value'])
+                    ->setTargetPath('catalog/category/view/id/' . $subroot_id . '/vendor/' . $option['value'])
+                    ->setRequestPath('vendor/' . $code)
+                    ->save();
+            }
+            //overwrite the old one
+            else {
+                $rewriteVendor->setIdPath('vendor_' . $code . '_' . $option['value'])
+                        ->setTargetPath('catalog/category/view/id/' . $subroot_id . '/vendor/' . $option['value'])
+                        ->save();
+            }
+        }
+    }
+
 
 }

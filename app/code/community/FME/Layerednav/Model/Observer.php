@@ -12,7 +12,7 @@ Class FME_Layerednav_Model_Observer
 			              ->load();
 
 			$options = $_collection->toOptionArray();
-
+			$subroot_id = Mage::getStoreConfig('layerednav/layerednav/catalog_parent_category_id');
 			foreach ($options as $option){
 				$code = strtolower(preg_replace('#[^0-9a-z ]+#i', '', $option['label']));
 				$code = str_replace(' ', '-', trim($code));
@@ -21,14 +21,14 @@ Class FME_Layerednav_Model_Observer
 					Mage::getModel('core/url_rewrite')
 					    ->setIsSystem(false)
 					    ->setIdPath($type . '_' . $code . '_' . $option['value'])
-					    ->setTargetPath('catalog/category/view/id/2003/'. $type .'/' . $option['value'])
+					    ->setTargetPath('catalog/category/view/id/'. $subroot_id .'/'. $type .'/' . $option['value'])
 					    ->setRequestPath($type . '/' . $code)
 					    ->save();
 				}
 				//overwrite the old one
 				else {
 					$rewrite->setIdPath($type . '_' . $code . '_' . $option['value'])
-							->setTargetPath('catalog/category/view/id/2003/'. $type .'/' . $option['value'])
+							->setTargetPath('catalog/category/view/id/'. $subroot_id .'/'. $type .'/' . $option['value'])
 							->save();
 				}
 			}

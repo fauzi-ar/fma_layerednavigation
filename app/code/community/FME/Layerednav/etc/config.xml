@@ -13,7 +13,7 @@
 <config>
     <modules>
         <FME_Layerednav>
-            <version>1.0.1</version>
+            <version>1.1.0</version>
         </FME_Layerednav>
     </modules>
     <frontend>
@@ -56,7 +56,6 @@
         </translate>
     </adminhtml> 
     
-   
     <global> 
         <models>
             <layerednav>
@@ -97,27 +96,6 @@
                 <class>FME_Layerednav_Helper</class>
             </layerednav>
         </helpers>
-        <resources>
-            <layerednav_setup>
-                <setup>
-                    <module>FME_Layerednav</module>
-                    <class>FME_Layerednav_Model_Resource_Setup</class>
-                </setup>
-                <connection>
-                    <use>core_setup</use>
-                </connection>
-            </layerednav_setup>
-            <layerednav_write>
-                <connection>
-                    <use>core_write</use>
-                </connection>
-            </layerednav_write>
-            <layerednav_read>
-                <connection>
-                    <use>core_read</use>
-                </connection>
-            </layerednav_read>
-        </resources>
         <events>
             <catalog_entity_attribute_save_after>
                 <observers>
