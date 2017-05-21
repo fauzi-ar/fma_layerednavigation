@@ -7,27 +7,22 @@ class FME_Layerednav_Model_System_Config_Backend_Parentcategoryid extends Mage_C
 		//Get the saved value
 		$value = $this->getValue();
 		
-		//Get the value from config (previous value)
-		$oldValue = $this->getOldValue();
-		
-		if ($value != $oldValue)
+		if (empty($value) || trim($value) === '')
 		{
-			if (empty($value) || trim($value) === '')
-			{
-				Mage::helper('layerednav')->__('Something\'s wrong');
-			}
-			else
-			{
-				Mage::getSingleton('adminhtml/session')->addNotice(
-					Mage::helper('layerednav')->__('url Rewrite has been created.')
-				);
-
-				//create rewrite for Brand and Vendor
-				Mage::helper('layerednav')->createBrandRewrite($value);
-				Mage::helper('layerednav')->createVendorRewrite($value);
-			}
+			Mage::helper('layerednav')->__('Something\'s wrong');
 		}
-		
+		else
+		{
+			Mage::getSingleton('adminhtml/session')->addNotice(
+				Mage::helper('layerednav')->__('url Rewrite has been created.')
+			);
+
+			//create rewrite for Brand and Vendor and Sale
+			Mage::helper('layerednav')->createBrandRewrite($value);
+			Mage::helper('layerednav')->createVendorRewrite($value);
+			Mage::helper('layerednav')->createSaleRewrite($value);
+		}
+	
         return parent::_afterSave();
     }
 }

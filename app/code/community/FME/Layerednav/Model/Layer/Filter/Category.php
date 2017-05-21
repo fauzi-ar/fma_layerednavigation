@@ -113,14 +113,20 @@ class FME_Layerednav_Model_Layer_Filter_Category extends Mage_Catalog_Model_Laye
             $tags = $this->getLayer()->getStateTags();
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         
-       // echo '<pre>';print_r($data);
         return $data;
     }
 
     protected function _initItems() {
         $data = $this->_getItemsData();
         $items = array();
+        $subroot_id = Mage::getStoreConfig('layerednav/layerednav/catalog_parent_category_id');
+        $params = Mage::app()->getRequest()->getParams();
+        if (isset($params['brand']) || isset($params['vendor']) || isset($params['sale'])){
+            $specialCategoryMode = true;
+        }
+
         foreach ($data as $itemData) {
+            if (!$specialCategoryMode && $itemData['category_id'] == $subroot_id) continue;
             $obj = new Varien_Object();
             $obj->setData($itemData);
             $obj->setUrl($itemData['value']);

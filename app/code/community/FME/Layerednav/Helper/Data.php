@@ -490,8 +490,9 @@ class FME_Layerednav_Helper_Data extends Mage_Core_Helper_Abstract {
                       ->load();
         $options = $_collection->toOptionArray();
         foreach ($options as $option){
-            $code = strtolower(preg_replace('#[^0-9a-z ]+#i', '', $option['label']));
-            $code = str_replace(' ', '-', trim($code));
+            $code = trim(strtolower($option['label']));
+            $code = preg_replace('#[^0-9a-z &@\._]+#', '', $code);
+            $code = preg_replace('#[ &@\._]+#', '-',$code);
             $rewriteBrand = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath('brand/' . $code);
             if (!($rewriteBrand['url_rewrite_id'])){
                 Mage::getModel('core/url_rewrite')
@@ -521,8 +522,10 @@ class FME_Layerednav_Helper_Data extends Mage_Core_Helper_Abstract {
         $options = $_collection->toOptionArray();
             
         foreach ($options as $option){
-            $code = strtolower(preg_replace('#[^0-9a-z ]+#i', '', $option['label']));
-            $code = str_replace(' ', '-', trim($code));
+            $code = trim(strtolower($option['label']));
+            $code = preg_replace('#[^0-9a-z &@\._]+#', '', $code);
+            $code = preg_replace('#[ &@\._]+#', '-',$code);
+            $code = preg_replace('#^[-]+|[-]+$#', '',$code);
             $rewriteVendor = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath('vendor/' . $code);
             if (!($rewriteVendor['url_rewrite_id'])){
                 Mage::getModel('core/url_rewrite')
@@ -538,6 +541,23 @@ class FME_Layerednav_Helper_Data extends Mage_Core_Helper_Abstract {
                         ->setTargetPath('catalog/category/view/id/' . $subroot_id . '/vendor/' . $option['value'])
                         ->save();
             }
+        }
+    }
+
+    public function createSaleRewrite($subroot_id){
+        $rewriteSale = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath('sale');
+        if (!($rewriteSale['url_rewrite_id'])){
+            Mage::getModel('core/url_rewrite')
+                ->setIsSystem(false)
+                ->setIdPath('category_sale')
+                ->setTargetPath('catalog/category/view/id/' . $subroot_id . '/sale')
+                ->setRequestPath('sale')
+                ->save();
+        }
+        else {
+            $rewriteSale->setIdPath('category_sale')
+            ->setTargetPath('catalog/category/view/id/' . $subroot_id . '/sale')
+            ->save();
         }
     }
 

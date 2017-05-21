@@ -20,6 +20,10 @@ class FME_Layerednav_Model_Layer_Filter_Categorysearch extends Mage_Catalog_Mode
 
         if ($data === null) {
             $category   = $this->getCategory();
+            $subroot_id = Mage::getStoreConfig('layerednav/layerednav/catalog_parent_category_id');
+            if ($category->getLevel() == 1){
+                $category   = Mage::getModel('catalog/category')->load(Mage::getStoreConfig('layerednav/layerednav/catalog_parent_category_id'));
+            }
             
             /** @var $categoty Mage_Catalog_Model_Categeory */
             $categories = $category->getChildrenCategories();

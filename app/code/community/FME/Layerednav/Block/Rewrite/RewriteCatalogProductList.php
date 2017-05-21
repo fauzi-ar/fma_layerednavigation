@@ -2,6 +2,30 @@
 
 class FME_Layerednav_Block_Rewrite_RewriteCatalogProductList extends Mage_Catalog_Block_Product_List
 {
+  protected function _prepareLayout(){
+      parent::_prepareLayout();
+      $params = Mage::app()->getRequest()->getParams();
+      if (isset($params['brand'])){
+          $attr = Mage::getSingleton('catalog/product')->getResource()->getAttribute('brand');
+          if ($attr->usesSource()) {
+              $brand_label = $attr->getSource()->getOptionText($params['brand']);
+          }      
+          $this->getLayout()->getBlock('head')->setTitle($brand_label);
+      }
+       
+      else if(isset($params['vendor'])){
+        $attr = Mage::getSingleton('catalog/product')->getResource()->getAttribute('vendor');
+        if ($attr->usesSource()) {
+            $vendor_label = $attr->getSource()->getOptionText($params['vendor']);
+        }      
+        $this->getLayout()->getBlock('head')->setTitle($vendor_label); 
+      }
+
+      else  if (isset($params['sale'])){
+        $this->getLayout()->getBlock('head')->setTitle('Products on Sale');
+      }
+
+  }
   protected function _getProductCollection() {
     if (is_null($this->_productCollection)) {
       $layer = $this->getLayer();
@@ -52,7 +76,11 @@ class FME_Layerednav_Block_Rewrite_RewriteCatalogProductList extends Mage_Catalo
       $id = $params['vendor'];
       $returnedProductCollection->addAttributeToFilter('vendor',$id);
     }
-       
+
+    else  if (isset($params['sale'])){
+      $now = Mage::getSingleton('core/date')->gmtDate();
+      $returnedProductCollection->addAttributeToFilter('special_from_date', array('date' => true, 'to' => $now), 'left');
+    }
     return $returnedProductCollection; 
    }
 }

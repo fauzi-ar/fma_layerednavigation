@@ -135,9 +135,27 @@ class FME_Layerednav_Block_Layer_View extends Mage_Catalog_Block_Layer_View {
         }
     }
 
-    public function getFilters() {
+    /**
+     * Get all layer filters
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
         if (is_null($this->_filterBlocks)) {
-            $this->_filterBlocks = parent::getFilters();
+            $filters = array();
+            if ($categoryFilter = $this->_getCategoryFilter()) {
+                $filters[] = $categoryFilter;
+            }
+
+            $filterableAttributes = $this->_getFilterableAttributes();
+            $params = Mage::app()->getRequest()->getParams();
+
+            foreach ($filterableAttributes as $attribute) {
+                if (isset($params[$attribute->getAttributeCode()])) continue; //if brand exist in param, don't show in filter
+                $filters[] = $this->getChild($attribute->getAttributeCode() . '_filter');
+            }
+            $this->_filterBlocks =  $filters;
         }
         return $this->_filterBlocks;
     }
